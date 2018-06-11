@@ -18,9 +18,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-sid", "--signal_id", nargs="+", default=[], help="Input (different versions of) the name of signal to be recorded. Example: -sid \"ABP Mean\" \"ABP MEAN\"")
 parser.add_argument("-sf", "--sampfrom", type=int, default=0, help="Input the beginning of time series sequence. Example: -sf 100")
 parser.add_argument("-st", "--sampto", type=int, default=-1, help="Input the end of time series sequence. -1 for end of sequence. Example: -st 1000")
-parser.add_argument("-p", "--physical", type=bool, default=True, help="Input whether signal is physical or digital. Example: -p 0 OR -p True")
-parser.add_argument("-smd", "--savemetadata", type=bool, default=False, help="Save or not save metadata in csv. Example: -smd 1 OR -smd False")
-parser.add_argument("-sts", "--savetimeseries", type=bool, default=False, help="Save or not save timeseries data in csv. Example: -sts 1 OR -sts False")
+parser.add_argument("-p", "--physical", action="store_true", help="Input whether signal is physical or digital. Example: -p")
+parser.add_argument("-smd", "--savemetadata", action="store_true", help="Save or not save metadata in csv. Example: -smd")
+parser.add_argument("-sts", "--savetimeseries", action="store_true", help="Save or not save timeseries data in csv. Example: -sts")
 args = vars(parser.parse_args())
 
 
