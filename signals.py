@@ -13,7 +13,7 @@ dirs = os.popen("ls " + data_path).read().split()
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-s", "--save", type=bool, default=False, help="Save or not save data in csv. Example: -s 1 OR -s False")
+parser.add_argument("-s", "--save", action="store_true", help="Save or not save data in csv. Example: -s")
 args = vars(parser.parse_args())
 
 
