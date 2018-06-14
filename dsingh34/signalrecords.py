@@ -14,7 +14,7 @@ def joindicts(dict1, dict2, op=operator.add):
 
 database_dir = "/".join(os.popen("pwd").read().split()[0].split("/")[:-1])
 work_dir = os.popen("pwd").read().split()[0]
-data_dir = "database/mimic3wdb/matched_numeric"
+data_dir = "database/mimic3wdb/matched_num"
 data_path = database_dir + "/" + data_dir
 dirs = [dr.split("/")[-2] for dr in os.popen("ls -d " + data_path + "/*/").read().split()]
 
