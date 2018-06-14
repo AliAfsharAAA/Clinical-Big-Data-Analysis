@@ -5,10 +5,11 @@ from mpi4py import MPI
 import wfdb
 
 
+database_dir = "/".join(os.popen("pwd").read().split()[0].split("/")[:-1])
 work_dir = os.popen("pwd").read().split()[0]
-data_dir = "database/mimic3wdb/matched"
-data_path = work_dir + "/" + data_dir
-dirs = os.popen("ls " + data_path).read().split()
+data_dir = "database/mimic3wdb/matched_numeric"
+data_path = database_dir + "/" + data_dir
+dirs = [dr.split("/")[-2] for dr in os.popen("ls -d " + data_path + "/*/").read().split()]
 
 
 rank = MPI.COMM_WORLD.Get_rank()
@@ -16,11 +17,11 @@ size = MPI.COMM_WORLD.Get_size()
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-sid", "--signal_id", nargs="+", default=[], help="Input (different versions of) the name of signal to be recorded. Example: -sid \"ABP Mean\" \"ABP MEAN\"")
+parser.add_argument("-smd", "--savemetadata", action="store_true", help="Save or not save metadata in csv. Example: -smd")
+parser.add_argument("-sts", "--savetimeseries", action="store_true", help="Save or not save timeseries data in csv. Example: -sts")
 parser.add_argument("-sf", "--sampfrom", type=int, default=0, help="Input the beginning of time series sequence. Example: -sf 100")
 parser.add_argument("-st", "--sampto", type=int, default=-1, help="Input the end of time series sequence. -1 for end of sequence. Example: -st 1000")
 parser.add_argument("-p", "--physical", action="store_true", help="Input whether signal is physical or digital. Example: -p")
-parser.add_argument("-smd", "--savemetadata", action="store_true", help="Save or not save metadata in csv. Example: -smd")
-parser.add_argument("-sts", "--savetimeseries", action="store_true", help="Save or not save timeseries data in csv. Example: -sts")
 args = vars(parser.parse_args())
 
 
@@ -39,7 +40,10 @@ if rank == 0:
         
     if args["savemetadata"]:
             
-        os.system("mkdir -p " +  work_dir + "/processed_data/metadata")
+        if os.path.exists(work_dir + "/processed_data/metadata"):
+            if os.path.exists(filename1):
+                os.system("rm " + filename1)
+        else: os.system("mkdir -p " +  work_dir + "/processed_data/metadata")
             
         f1 = open(filename1, "a")
         writer = csv.writer(f1)
@@ -48,7 +52,10 @@ if rank == 0:
             
     if args["savetimeseries"]:
             
-        os.system("mkdir -p " +  work_dir + "/processed_data/timeseries")
+        if os.path.exists(work_dir + "/processed_data/timeseries"):
+            if os.path.exists(filename2):
+                os.system("rm " + filename2)
+        else: os.system("mkdir -p " +  work_dir + "/processed_data/timeseries")
             
         col_names2 = col_names[:2]
         col_names2.append("time_series_sequence")
@@ -132,3 +139,21 @@ for dr in dirs:
             writer = csv.writer(f2)
             writer.writerows(records_data)
             f2.close()
+            
+if rank == 0:
+    if args["savemetadata"] and not args["savetimeseries"]:
+        if os.path.exists(filename1):
+            print("Metadata csv file saved successfully.")
+        else: print("Error in saving metadata csv file.")
+    elif not args["savemetadata"] and args["savetimeseries"]:
+        if os.path.exists(filename2):
+            print("Timeseries data csv file saved successfully.")
+        else: print("Error in saving timeseries data csv file.")
+    elif args["savemetadata"] and args["savetimeseries"]:
+        if os.path.exists(filename1) and os.path.exists(filename2):
+            print("All data csv files saved successfully.")
+        else:
+            if not os.path.exists(filename1):
+                print("Error in saving metadata csv file.")
+            if not os.path.exists(filename2):
+                print("Error in saving timeseries data csv file.")
