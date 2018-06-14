@@ -6,7 +6,7 @@ import re
 database_dir = "/".join(os.popen("pwd").read().split()[0].split("/")[:-1])
 
 data_path = database_dir + "/database/mimic3wdb/matched"
-numeric_path = database_dir + "/database/mimic3wdb/matched_numeric"
+numeric_path = database_dir + "/database/mimic3wdb/matched_num"
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", "--check", action="store_true", help="Check whether mimic-iii matched waveform dataset has been copied correctly or not. Example: -c")
