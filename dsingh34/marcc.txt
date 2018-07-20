@@ -1,0 +1,12 @@
+Command to run once so that you don't need to repeatedly enter verification code and password:
+ssh -fNM gateway2.marcc.jhu.edu -l dsingh34@jhu.edu
+ssh -fNM dsingh34@jhu.edu@gateway2.marcc.jhu.edu
+
+General ssh MARCC login command:
+ssh dsingh34@jhu.edu@gateway2.marcc.jhu.edu
+
+scp command to transfer data from MARCC (-r for directory):
+scp -r dsingh34@jhu.edu@gateway2.marcc.jhu.edu:data/path /local/path
+
+scp command to transfer data to MARCC (-r for directory):
+scp -r /local/path dsingh34@jhu.edu@gateway2.marcc.jhu.edu:marcc/path
